@@ -1,0 +1,37 @@
+{# jinja2 HTML Rendering Template for tool_timer #}
+
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+Usage Timer
+{% endblock %}
+
+{# #}
+{% block content %}
+
+<div id="top-tool-div" class="container" style="max-width:512px;">
+
+  <br>
+  <div id="home-div" class="app-div col-xs-12" >
+  {# #}
+  {% include "tool_panel.html" %} 
+  {# #}
+  {% include "charges_panel.html" %} 
+  {# #}
+  {% include "auth_stand_alone.html" %}    
+  {# #}
+  <div id="rate-info-div" class="well" hidden></div>
+  </div>
+
+</div>
+
+{% endblock %} 
+
+{# #}
+{% block scripts %}  
+{{ super() }} {# Call in our scripts *after* bootstrap calls in jquery #}
+<script type="text/javascript" src="{{ url_for('static', filename='sprintf.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='tool_timer.js') }}"></script>
+{% endblock %} 
+
+

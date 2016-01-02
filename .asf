@@ -1,0 +1,8 @@
+./tool_timer.py
+./tool_timer_flask_app/__init__.py
+./tool_timer_flask_app/static/tool_timer.js
+./tool_timer_flask_app/templates/auth_stand_alone.html
+./tool_timer_flask_app/templates/charges_panel.html
+./tool_timer_flask_app/templates/home.html
+./tool_timer_flask_app/templates/titleblock.html
+./tool_timer_flask_app/templates/tool_panel.html

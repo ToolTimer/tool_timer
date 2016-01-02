@@ -1,0 +1,4 @@
+vi -p `cat .apf` &
+vi -p `cat .ahf`
+
+
