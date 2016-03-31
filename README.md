@@ -28,5 +28,4 @@ web-based tool usage timer for maker space. server implemented in flask python w
 >- **Logging** - Record user id, membership, start time, stop time to a file
 >- **Admin Screen** - Shows activity
 >- **Simple Authentication** : Prompts user for their initials and a single locally-stored password.
->- **Better Authentication** : Utilize **oAuth2** for authentication, for use with Google  
-![](https://developers.google.com/identity "Google Identity Platform") or a private oAuth server.
+>- **Better Authentication** : Utilize **oAuth2** for authentication, for use with **Google Identity** or a private oAuth server.
