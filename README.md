@@ -25,5 +25,5 @@ web-based tool usage timer for maker space. server implemented in flask python w
 >- sudo pip install flask-bootstrap
 
 ## Development Plan
-
+### Logging
 >- Tool should use  **oAuth2** for authentication, prompting the user for their unique credentials
