@@ -1,0 +1,126 @@
+
+
+<head>
+<STYLE TYPE="text/css" MEDIA=screen>
+
+    BODY, P, DIV, TD, TH, TR, FORM, OL, UL, LI, INPUT, TEXTAREA, SELECT, A
+    { font-family: Arial, Verdana, Tahoma, Helvetica, sans-serif; }
+
+    .typegrn     { font-family: Courier New; color: #008803 }
+h1           { color: #FFFFFF; background-color: #996633; font-family: 
+               Arial, Verdana, Tahoma, Helvetica, sans-serif; border-style: 
+               solid }
+a:.li        {color: #ffffff; text-decoration: none;font-family: Arial, Verdana, Tahoma, Helvetica, sans-serif; font-size: 14px;}
+    a:link.li    {color: #ffffff; text-decoration: none;font-family: Arial, Verdana, Tahoma, Helvetica, sans-serif; font-size: 14px;}
+	a:visited.li {color: #c0c0c0; text-decoration: none;font-family: Arial, Verdana, Tahoma, Helvetica, sans-serif; font-size: 14px;}
+	a:active.li  {color: #ffffff; text-decoration: none;font-family: Arial, Verdana, Tahoma, Helvetica, sans-serif; font-size: 14px;}
+	a:hover.li   {color: #ffffff; text-decoration: underline; none;font-family: Arial, Verdana, Tahoma, Helvetica, sans-serif; font-size: 14px}
+
+	A            {                text-decoration: none; font-family: Arial, Verdana, Tahoma, Helvetica, sans-serif;}
+	A:hover      {                text-decoration: underline; font-family: Arial, Verdana, Tahoma, Helvetica, sans-serif;}
+
+    body {  font-family: Arial, Verdana, Tahoma, Helvetica, sans-serif; 
+            background-attachment: fixed; background-image: url('/bodybg.jpg'); 
+    }
+
+pre          { font-family: Courier New; color: #996633 }
+
+  .ourcolor           { color: #9999FF  }
+
+</STYLE>
+
+</head>
+
+<h1 dir="ltr">USB Relay Usage Timer Project </h1>
+<div class="gmail_default" style="color: rgb(34, 34, 34); font-family: arial, sans-serif; font-size: small; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 1; word-spacing: 0px; -webkit-text-stroke-width: 0px;">
+  So in a fit of&nbsp;<s>boredom&nbsp;</s>poor time management I had a look at how to 
+  automate laser cutter access and billing.<p>
+  <img border="0" src="README2.jpg" width="790" height="843"></div>
+<div class="gmail_default" style="color: rgb(34, 34, 34); font-family: arial, sans-serif; font-size: small; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 1; word-spacing: 0px; -webkit-text-stroke-width: 0px;">
+  <br>
+&nbsp;</div>
+<div class="gmail_default" style="color: rgb(34, 34, 34); font-family: arial, sans-serif; font-size: small; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 1; word-spacing: 0px; -webkit-text-stroke-width: 0px;">
+  I mocked up an web app which:</div>
+<div class="gmail_default" style="color: rgb(34, 34, 34); font-family: arial, sans-serif; font-size: small; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 1; word-spacing: 0px; -webkit-text-stroke-width: 0px;">
+  <p class="MsoNormal" style="margin: 0px;"><br>
+&nbsp;</div>
+<div class="gmail_default" style="color: rgb(34, 34, 34); font-family: arial, sans-serif; font-size: small; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 1; word-spacing: 0px; -webkit-text-stroke-width: 0px;">
+  <ul>
+    <li>Asks users to authenticate using their nova-labs login/pw</li>
+    <li>Can turn mongo on and off using a USB Relay</li>
+    <li>Keeps track of time used and monies owed</li>
+    <li>Able to apply different billing rates based on membership level</li>
+    <li>Able to directly charge member's stripe accounts</li>
+  </ul>
+  <div>
+    <br>
+&nbsp;</div>
+  <div>
+    I started out mocking things as a chrome app, this would have worked were it 
+    not for the fact the cheap-assed chinese usb relays use HID and that the 
+    chrome.hid API on windows is kind of broken.</div>
+  <div>
+    <br>
+&nbsp;</div>
+  <div>
+    <img src="https://mail.google.com/mail/u/0/?ui=2&ik=cfb131420d&view=fimg&th=1515583b44a437f2&attid=0.1&disp=emb&realattid=ii_1515583b44a437f2&attbid=ANGjdJ_MiK8uX6so-PuiOmNV_NlaqxGUGcgXeckVjvgN3LKZI5d8PMteOwll495bowm-8TM8Wfyum26zOPuGwrtykoUY2fTFkIb0qAmZwDHfQcq62Wqivroc-zFZcdw&sz=s0-l75&ats=1448838674241&rm=1515583b44a437f2&zw" data-surl="https://mail.google.com/mail/u/0/?ui=2&amp;ik=cfb131420d&amp;view=fimg&amp;th=1515584a6720ad2d&amp;attid=0.1&amp;disp=emb&amp;realattid=ii_1515583b44a437f2&amp;attbid=ANGjdJ_VhMjuNdijIFz7X6fufF9W8fx-b5bR3JFmkzXONypQl4IH7hxCmh_V2HBpYnjYJ1EuXfsFQUfRPDjbU75QaXjcG7Tw2uvDruM5qCmhU19Mj2Es4MANoCUQZSQ&amp;sz=s0-l75&amp;ats=1448838736122&amp;rm=1515584a6720ad2d&amp;zw" alt="Inline image 2" width="415" height="363"><br>
+&nbsp;</div>
+  <div>
+    <br>
+&nbsp;</div>
+  <div>
+    So I switched to using the Flask Web framework (python), which allowed me to 
+    just fire a canned .exe which can control the relay.</div>
+  <div>
+&nbsp;</div>
+</div>
+<h2>USBRelayExtLib</h2>
+<p>Library comes with the USB Relays from ebay (
+<a href="http://www.winddeal.net/image/tools/26484%20%2026483%20USBRelayExtLib.rar">
+http://www.winddeal.net/image/tools/26484%20%2026483%20USBRelayExtLib.rar</a> )</p>
+<p>Includes a GUI. Use 'find device' to determine &quot;serial number&quot;</p>
+<p>
+<img border="0" src="README1.jpg" width="285" height="429"></p>
+<p>&nbsp;</p>
+<p>Also has command line version: </p>
+<p class="typegrn">./CommandApp_USBRelay.exe AG9AJ open 1<br>
+./CommandApp_USBRelay.exe AG9AJ close 1</p>
+<p class="typegrn">&nbsp;</p>
+<h3>Plan going forward: </h3>
+<p>Create python / flask app </p>
+<p>Read up on flask at&nbsp; <a href="http://flask.pocoo.org/">
+http://flask.pocoo.org/</a> </p>
+<p>Install flask and all dependencies with <b>easy_install flask</b></p>
+<p>&nbsp;</p>
+<p><b>Current Status</b></p>
+<p dir="ltr">Started to write the flask app:<b> 
+USBRelay\usage_timer\usage_timer.py</b></p>
+<p dir="ltr">&nbsp;</p>
+<p dir="ltr">&nbsp;</p>
+<p dir="ltr">&nbsp;</p>
+<p dir="ltr">Development Roadmap</p>
+<ul>
+  <li dir="ltr">
+<p dir="ltr">Obtain authentication from <a href="http://www.nova-labs.org">
+www.nova-labs.org</a>, or locally-replicated tables. Should Retrieve stripe 
+authkey for user</p>
+  </li>
+  <li dir="ltr">
+<p dir="ltr">usage_timer.py maintains all session state. User can crash restart 
+browser and reconnect and all state will be retained</p>
+  </li>
+  <li dir="ltr">
+<p dir="ltr">usage_timer.py should scribble to a local log periodically while 
+also writing a log to <a href="http://www.nova-labs.org">www.nova-labs.org</a></p>
+  </li>
+  <li dir="ltr">
+<p dir="ltr">finish GUI elements including logout and accept payment</p>
+  </li>
+</ul>
+<p dir="ltr">&nbsp;</p>
+<blockquote>
+<p>&nbsp;</p>
+</blockquote>
+<p>&nbsp;</p>
+<p><br>
+&nbsp;</p>

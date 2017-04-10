@@ -5,6 +5,8 @@
 //
 $(function () {
 
+  Stripe.setPublishableKey('pk_test_ZuvF5RRg6If2djTQvVK6Xlmh');
+
   tool_runtime_secs = 0;
   tool_started = false;
   total_charges = 0;
@@ -72,10 +74,14 @@ function GetInfoSuccess(json) {
   tool_runtime_secs = parseInt(json.tool_runtime_secs);
   total_charges = parseFloat(json.total_charges);
 
-  if (json.tool_started)
+  if (json.tool_started) {
     $("#tool-main-message").html("TOOL IS <strong>ON</strong>");
-  else
+    $("#tool-main-message").addClass("frantic");
+  }
+  else {
     $("#tool-main-message").html("TOOL IS <strong>OFF</strong>");
+    $("#tool-main-message").removeClass("frantic");
+  }
 
   $("#charges-message").html(json.message)
 
@@ -100,7 +106,7 @@ function RenderHomeDiv(ThisButton) {
 function RenderAdminDiv(ThisButton) {
   $('#top-nav').find('li').removeClass('active');
   $('#admin-button').parent().addClass('active')
-    $('.app-div').hide();
+  $('.app-div').hide();
   $('#admin-div').show();
 }
 
@@ -176,7 +182,8 @@ function OneSecChores() {
 
   if (tool_started) {
     tool_runtime_secs++;
-    if ( !(tool_runtime_secs % 15) ) {
+    console.log(tool_runtime_secs);
+    if ( tool_runtime_secs == 5 || !(tool_runtime_secs % 15) ) {
       FifteenSecChores();
     }
   }
@@ -203,11 +210,13 @@ function DisplayCharge() {
 
 function PayNowButton() {
 
-    m = '';
+    m = ''; 
     m += 'Log Into <a target="#" href="https://www.nova-labs.org/account/accounting.html">Your Nova Labs Account</a><br>';
     m += 'And make a one-time payment of <b>$' + total_charges + '</b><br>';
-    m += '<button id="start-logout-button" class="btn btn-sm btn-primary logout-button">LOGOUT</button>';
+    m += '<button id="start-logout-button" class="btn btn-sm btn-primary logout-button">PAY NOW</button>';
     $('#charges-message').html(m);
+
+
 }
 
 });

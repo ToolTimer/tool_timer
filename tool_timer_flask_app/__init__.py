@@ -3,7 +3,7 @@
 tool_timer_flask_app/__init__.py
 
  Implements a usage timer which enforces access control over a resource which is ultimately controlled
- by a USB Relay
+ by a Relay being turned on and off
 
  Uses the Flask web server microframework with Flask-bootstrap
 
@@ -15,7 +15,7 @@ GPIO.cleanup()
 GPIO.setup(relay_pin, GPIO.OUT)
 import sys
 
-win32api_loaded = True
+win32api_loaded = True # JIC we are running on a PC
 try:
   import win32api
 except:
@@ -27,11 +27,17 @@ from pprint import pprint
 from flask import *
 from flask_bootstrap import Bootstrap
 
+import requests
+
 flaskapp          = Flask(__name__)
 tool_started      = False
 tool_runtime_secs = 0;
 membership_level  = 'logged_out'
 member_email      = ''
+
+stripe_token = ''
+stripe_token_type = ''
+stripe_email = ''
 
 
 import charges
@@ -44,6 +50,7 @@ def homepage():
   respond with main page
   """
   return render_template('home.html')
+
 
 @flaskapp.route('/ajax',methods=['POST'])
 def do_ajax_command():
@@ -98,10 +105,25 @@ def do_ajax_command():
 
   return json_punt('Don''t understand what you are asking me to do')
 
+@flaskapp.route('/stripe')
+def do_process_stripe():
+    global stripe_token
+    stripe_token  = request.args.get('stripeToken')
+    global stripe_token_type
+    stripe_token_type = request.args.get('stripeTokenType')
+    global stripe_email 
+    stripe_email= request.args.get('stripeEmail')
+    return render_template('home.html')
+
 def GetInfo():
   global tool_started
   global membership_level
   global tool_runtime_secs
+
+  global stripe_token
+  global stripe_token_type
+  global stripe_email
+
   m = 'You are logged in as <b>' + membership_level + '</b>'
   total_charges  = charges.get_total(membership_level,tool_runtime_secs)
   if (membership_level == 'logged_out'):
@@ -109,15 +131,17 @@ def GetInfo():
     login_button = '&nbsp<button id="start-login-button" class="btn btn-sm btn-primary login-button">LOGIN</button>'
     m = 'You are logged out.' + login_button
 
-    resp = {'error'             : 0,
-            'member_email'      : member_email,
-            'tool_started'      : tool_started,
-            'membership_level'  : membership_level,
-            'stripe_key'        : '000000000000000000000000000',
-            'message'           : m,
-            'tool_runtime_secs' : tool_runtime_secs,
-            'total_charges'     : total_charges,
-            'rate_info'         : charges.rate_info };
+    resp = {'error'     : 0,
+    'member_email'      : member_email,
+    'tool_started'      : tool_started,
+    'membership_level'  : membership_level,
+    'message'           : m,
+    'tool_runtime_secs' : tool_runtime_secs,
+    'total_charges'     : total_charges,
+    'rate_info'         : charges.rate_info,
+    'stripe_token'      : stripe_token,
+    'stripe_token_type' : stripe_token_type,
+    'stripe_email'      : stripe_email };
 
     return(jsonify(resp))
 
@@ -130,21 +154,43 @@ def GetInfo():
           logout_button = '&nbsp<button id="start-logout-button" class="btn btn-sm btn-primary logout-button">LOGOUT</button>'
           m += logout_button 
       else:
-          pay_now_button = '&nbsp<button  class="btn btn-sm btn-primary pay-now-button">PAY NOW</button>'
-          m += pay_now_button
+          #pay_now_button = '&nbsp<button  class="btn btn-sm btn-primary pay-now-button">PAY NOW</button>'
+          #m += pay_now_button
+          m += PayNowForm()
 
     resp = {'error'             : 0,
             'member_email'      : member_email,
             'tool_started'      : tool_started,
             'membership_level'  : membership_level,
-            'stripe_key'        : '000000000000000000000000000',
             'message'           : m,
             'tool_runtime_secs' : tool_runtime_secs,
             'total_charges'     : total_charges,
-            'rate_info'         : charges.rate_info };
+            'rate_info'         : charges.rate_info,
+            'stripe_token'      : stripe_token,
+            'stripe_token_type' : stripe_token_type,
+            'stripe_email'      : stripe_email };
 
     return(jsonify(resp))
 
+def PayNowForm():
+    """
+    see https://stripe.com/docs/checkout#integration-simple
+    """
+    return ''' 
+<form action="/stripe" method="GET">
+<script
+  src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+  data-key="pk_test_<insert your test key here>"
+  data-amount="2000"
+  data-name="Cogwheel, Inc."
+  data-description="asd fas asd fasd fasd fasdf asd fasd fsdf asdf asdf asdf asdf asdf asdf asdfas dfasd fasd fasd fasd fasd fasd fasd fasdf asdf asdf asdf asdf asdf asdfasd fasd fasd f"
+
+"
+  data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+  data-locale="auto">
+</script>
+</form>
+'''
 
 def DoLogin(login,password):
   global membership_level
@@ -159,7 +205,6 @@ def DoLogin(login,password):
     response         = {\
         'error'            : 0,\
         'membership_level' : 'member',\
-        'stripe_key'       : '000000000000000000000000000',\
         'message'          : 'You are logged in as a member.' + m}
     
     membership_level = 'member'
@@ -169,7 +214,6 @@ def DoLogin(login,password):
     response         = {\
         'error'            : 0,\
         'membership_level' : 'associate',\
-        'stripe_key'       : '000000000000000000000000000',\
         'message'          : 'You are logged in as guest.' + m}
 
     membership_level = 'guest'
@@ -178,7 +222,6 @@ def DoLogin(login,password):
     response         = {\
         'error'            : 0,\
         'membership_level' : 'guest',\
-        'stripe_key'       : '000000000000000000000000000',\
         'message'          : 'You are logged in as guest.' + m}
     membership_level = 'guest'
 
@@ -203,7 +246,6 @@ def DoLogout():
       'member_email'     : member_email,
       'tool_started'     : tool_started,
       'membership_level' : membership_level,
-      'stripe_key'       : '000000000000000000000000000',
       'message'          : m 
       };
 

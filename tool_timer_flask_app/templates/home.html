@@ -10,14 +10,13 @@ Usage Timer
 {% block content %}
 
 <div id="top-tool-div" class="container" style="max-width:512px;">
-
   <br>
   <div id="home-div" class="app-div col-xs-12" >
   {# #}
   {% include "tool_panel.html" %} 
   {# #}
   {% include "charges_panel.html" %} 
-  {# #}
+  {# uncomment for stand-alone 'honor system' auth #}
   {% include "auth_stand_alone.html" %}    
   {# #}
   <div id="rate-info-div" class="well" hidden></div>
@@ -32,6 +31,7 @@ Usage Timer
 {{ super() }} {# Call in our scripts *after* bootstrap calls in jquery #}
 <script type="text/javascript" src="{{ url_for('static', filename='sprintf.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='tool_timer.js') }}"></script>
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 {% endblock %} 
 
 

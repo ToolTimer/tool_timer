@@ -4,6 +4,8 @@ Tool Timer Invocation
 
 Usage: python tool_timer.py
 
+TODO: Integrate Stripe - https://jeffknupp.com/blog/2014/01/18/python-and-flask-are-ridiculously-powerful/
+
 """
 
 import threading

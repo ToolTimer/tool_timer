@@ -8,18 +8,32 @@ TODO: This should be a base class with overrides for particular tools
 """
 
 tool_name = "LASER CUTTER"
-
+start_charging_seconds = 1.0 # 60
 rate_info = """ 
-<pre>
-LASER CUTTER RATES:
 
-MEMBER           : $ 2.00 per hour
-ASSOCIATE MEMBER : $10.00 per hour
-GUEST            : $20.00 per hour
+<table border="0" width="100%">
+  <tr>
+    <td colspan="2"><font size="4">LASER CUTTER RATES:</font></td>
+    <td >&nbsp;</td>
+  </tr>
+  <tr>
+    <td >&nbsp;</td>
+    <td ><font size="3">KEY MEMBER</font></td>
+    <td ><font size="3">&lt;NO CHARGE&gt;</font></td>
+  </tr>
+  <tr>
+    <td >&nbsp;</td>
+    <td ><font size="3">NON-KEY MEMBER</font></td>
+    <td ><font size="3">$10.00 / HOUR</font></td>
+  </tr>
+  <tr>
+    <td >&nbsp;</td>
+    <td ><font size="3">GUEST</font></td>
+    <td ><font size="3">$20.00 / HOUR</font></td>
+  </tr>
+</table>
+<p> 1/2 Hour Minimum
 
-o Minimum Charge: .5 hour
-o Usage Limits: 2 hours per day, 8 hours per week
-</pre>
 
 """
 
@@ -35,7 +49,7 @@ def get_total(rate,seconds):
   
   first_half_hour = float((rate_per_hour[rate]) * .5)  # half an hour
 
-  if (seconds < 60):
+  if (seconds < start_charging_seconds):
     return ( float(0)) # don't charge until after the 1st minute
   if (seconds < (60*30)): # minimum charge
     return ( first_half_hour )
